@@ -36,7 +36,10 @@ def create_tf_dataset(train_path, tokenizer, max_length, test_size, batch_size, 
                 elems = line.split('\t')
                 assert len(elems) == 10, 'wrong line: {line}'
                 string = elems[1]
-                label = 0 if elems[-1][:-1] == '_' else 1
+                if elems[-1] == '_' :
+                    label = 0 
+                else:
+                    label = 1
                 toks = tokenizer.encode(string, add_special_tokens=False)
                 text += string
                 y_ += [label]*len(toks)
