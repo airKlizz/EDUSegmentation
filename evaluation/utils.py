@@ -9,6 +9,8 @@ def get_labels(results, text, tokenizer, reduction=np.sum):
     sublabels = np.argmax(results, axis=-1)[1:] # remove first result because [CLS] token
     labels = []
 
+    print('{} - {}'.format(results, sublabels))
+
     idx = 0
     for l in subword_lengths:
         label = []
