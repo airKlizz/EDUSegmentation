@@ -6,10 +6,10 @@ from evaluation.seg_eval import get_scores
 def get_labels(results, text, tokenizer, reduction=np.sum):
     subwords = list(map(tokenizer.tokenize, text))
     subword_lengths = list(map(len, subwords))
-    sublabels = np.argmax(results, axis=-1)[1:] # remove first result because [CLS] token
+    sublabels = np.argmax(results[0], axis=-1)[1:] # remove first result because [CLS] token
     labels = []
 
-    print('{} - {}'.format(results, sublabels))
+    print('{} - {}'.format(results.shape, sublabels.shape))
 
     idx = 0
     for l in subword_lengths:
