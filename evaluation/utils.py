@@ -54,7 +54,7 @@ def create_candidate(test_path, candidate_path, model, tokenizer, max_length, re
 
             inputs = tokenizer.encode_plus(text=' '.join(text), max_length=max_length, pad_to_max_length=True, return_token_type_ids=True, return_attention_mask=True)
 
-            results = model.predict([inputs['input_ids'], inputs['attention_mask'], inputs['token_type_ids']])
+            results = model.predict([[inputs['input_ids'], inputs['attention_mask'], inputs['token_type_ids']]])
 
             labels = get_labels(results, text, tokenizer, reduction=reduction)
             assert len(labels) == len(text)
