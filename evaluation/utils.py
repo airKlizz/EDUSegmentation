@@ -9,6 +9,12 @@ def get_labels(results, text, tokenizer, reduction=np.sum):
     sublabels = np.argmax(results[0], axis=-1)[1:] # remove first result because [CLS] token
     labels = []
 
+    print('\n---EVALUATION CHECK---')
+    print('Tokens : {}'.format(tokenizer.tokenize(' '.join(text))))
+    print('Toks labels : {}'.format(sublabels))
+    print('Text : {}'.format(text))
+
+
     idx = 0
     for l in subword_lengths:
         label = []
@@ -20,6 +26,8 @@ def get_labels(results, text, tokenizer, reduction=np.sum):
             idx += 1
         labels.append(min(1, int(round(reduction(label)))))
     
+    print('Labels : {}'.format(labels))
+
     return labels
 
 

@@ -25,7 +25,7 @@ def create_tf_dataset(train_path, tokenizer, max_length, test_size, batch_size, 
 
         for sentence in doc.split('\n\n'):
 
-            text = ""
+            text = []
             y_ = []
 
             for line in sentence.split('\n'):
@@ -34,17 +34,20 @@ def create_tf_dataset(train_path, tokenizer, max_length, test_size, batch_size, 
                     continue
 
                 elems = line.split('\t')
-                assert len(elems) == 10, 'wrong line: {line}'
+                assert len(elems) == 10, 'wrong line: {}'.format(line)
                 string = elems[1]
                 if elems[-1] == '_' :
                     label = 0 
                 else:
                     label = 1
                 toks = tokenizer.encode(string, add_special_tokens=False)
-                text += string
+                text.append(string)
                 y_ += [label]*len(toks)
+
+            if re.match(blank_pattern, ' '.join(text)) != None:
+                continue
             
-            inputs = tokenizer.encode_plus(text=text,
+            inputs = tokenizer.encode_plus(text=' '.join(text),
                                             max_length=max_length,
                                             pad_to_max_length=True,
                                             return_token_type_ids=True, 
@@ -56,6 +59,14 @@ def create_tf_dataset(train_path, tokenizer, max_length, test_size, batch_size, 
             ])
             y_ = pad_to_max_length(y_, max_length)
             y.append(y_)
+
+            '''
+            print('\n---DATASET CHECK---')
+            print('Text list: {}'.format(text))
+            print('Text str: {}'.format(' '.join(text)))
+            print('Tokens : {}'.format(tokenizer.convert_ids_to_tokens(inputs['input_ids'])))
+            print('Labels : {}'.format(y_))
+            '''
     
     train_X, validation_X, train_y, validation_y = train_test_split(X, y, random_state=random_state, test_size=test_size)
     train_dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y)).shuffle(shuffle).batch(batch_size)
