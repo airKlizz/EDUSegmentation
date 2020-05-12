@@ -58,11 +58,21 @@ train_dataset, validation_dataset = create_tf_dataset(train_path, tokenizer, max
 # optimizer, loss and metrics
 optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate, epsilon=1e-08, clipnorm=1.0)
 loss = tf.keras.losses.SparseCategoricalCrossentropy()
-metric = tf.keras.metrics.SparseCategoricalAccuracy('accuracy')
+metrics = [
+    tf.keras.metrics.SparseCategoricalAccuracy('accuracy'),
+    tf.keras.metrics.TruePositives(name='tp'),
+    tf.keras.metrics.FalsePositives(name='fp'),
+    tf.keras.metrics.TrueNegatives(name='tn'),
+    tf.keras.metrics.FalseNegatives(name='fn'), 
+    tf.keras.metrics.BinaryAccuracy(name='binary_accuracy'),
+    tf.keras.metrics.Precision(name='precision'),
+    tf.keras.metrics.Recall(name='recall'),
+    tf.keras.metrics.AUC(name='auc')
+]
 class_weight = {0: weight_for_0, 1: weight_for_1}
 
 # compile
-model.compile(optimizer=optimizer, loss=loss, metrics=[metric])
+model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
 # callbacks
 model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
@@ -73,6 +83,8 @@ model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
 # train
 for epoch in range(epochs):
     print('Epoch {}/{}'.format(epoch, epochs))
-    history = model.fit(train_dataset, epochs=1, validation_data=validation_dataset, callbacks=[model_checkpoint])
+    history = model.fit(train_dataset, epochs=1, validation_data=validation_dataset, callbacks=[model_checkpoint],
+                        #class_weight=class_weight
+                        )
     score_dict = run_evaluation(test_gold_path, candidate_path, model, tokenizer, max_length, reduction=reduction)
     print_score_dict(score_dict)
