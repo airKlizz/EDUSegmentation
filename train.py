@@ -60,14 +60,14 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate, epsilon=1e-08,
 loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
 metrics = [
     tf.keras.metrics.CategoricalAccuracy('accuracy'),
-    tf.keras.metrics.TruePositives(name='tp'),
-    tf.keras.metrics.FalsePositives(name='fp'),
-    tf.keras.metrics.TrueNegatives(name='tn'),
-    tf.keras.metrics.FalseNegatives(name='fn'), 
-    tf.keras.metrics.BinaryAccuracy(name='binary_accuracy'),
-    tf.keras.metrics.Precision(name='precision'),
-    tf.keras.metrics.Recall(name='recall'),
-    tf.keras.metrics.AUC(name='auc')
+    #tf.keras.metrics.TruePositives(name='tp'),
+    #tf.keras.metrics.FalsePositives(name='fp'),
+    #tf.keras.metrics.TrueNegatives(name='tn'),
+    #tf.keras.metrics.FalseNegatives(name='fn'), 
+    #tf.keras.metrics.BinaryAccuracy(name='binary_accuracy'),
+    #tf.keras.metrics.Precision(name='precision'),
+    #tf.keras.metrics.Recall(name='recall'),
+    #tf.keras.metrics.AUC(name='auc')
 ]
 class_weight = {0: weight_for_0, 1: weight_for_1}
 
