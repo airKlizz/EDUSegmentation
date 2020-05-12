@@ -57,9 +57,9 @@ train_dataset, validation_dataset = create_tf_dataset(train_path, tokenizer, max
 
 # optimizer, loss and metrics
 optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate, epsilon=1e-08, clipnorm=1.0)
-loss = tf.keras.losses.SparseCategoricalCrossentropy()
+loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
 metrics = [
-    tf.keras.metrics.SparseCategoricalAccuracy('accuracy'),
+    tf.keras.metrics.CategoricalAccuracy('accuracy'),
     tf.keras.metrics.TruePositives(name='tp'),
     tf.keras.metrics.FalsePositives(name='fp'),
     tf.keras.metrics.TrueNegatives(name='tn'),
